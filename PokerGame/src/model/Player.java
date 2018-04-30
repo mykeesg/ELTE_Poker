@@ -5,6 +5,11 @@
  */
 package model;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
+
 /**
  *
  * @author mykee
@@ -16,11 +21,17 @@ public class Player {
     private Card[] hand;
     private final String username;
     private final String password;
+    private Socket socket;
+    public Scanner input;
+    public PrintWriter output;
 
-    public Player(String name, String username, String password) {
+    public Player(String name, String username, String password, Socket socket) throws IOException {
         this.name = name;
         this.username = username;
         this.password = password;
+        this.socket = socket;
+        this.input = new Scanner(socket.getInputStream());
+        this.output = new PrintWriter(socket.getOutputStream());
         money = 0;
     }
 

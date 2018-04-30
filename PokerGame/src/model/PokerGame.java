@@ -89,14 +89,19 @@ public class PokerGame implements Runnable {
     public static void main(String[] args) {
 
         List<Player> plist = new LinkedList<>();
-        plist.add(new Player("Joco", null, null));
-        plist.add(new Player("Bela", null, null));
-        plist.add(new Player("Gazsi", null, null));
-        plist.add(new Player("Tilda", null, null));
+//        plist.add(new Player("Joco", null, null));
+//        plist.add(new Player("Bela", null, null));
+//        plist.add(new Player("Gazsi", null, null));
+//        plist.add(new Player("Tilda", null, null));
 
         PokerGame game = new PokerGame(plist, 100);
 
         game.run();
+    }
+
+    //TODO implements
+    public boolean finished() {
+        return false;
     }
 
 }
