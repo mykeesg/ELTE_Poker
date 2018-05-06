@@ -3,6 +3,7 @@ package client.frontend.components;
 import client.frontend.model.PlayerState;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
@@ -17,13 +18,17 @@ public class PlayerView {
         nameLabel.setText(player.name);
         moneyLabel.setText("$" + player.money);
         buttonLabel.setText("");
+        buttonLabel.setOpaque(true);
         if (player.isDealer) {
+            buttonLabel.setBackground(Color.GRAY);
             buttonLabel.setText("D");
         }
         if (player.isBigBlind) {
+            buttonLabel.setBackground(Color.RED);
             buttonLabel.setText("BB");
         }
         if (player.isSmallBlind) {
+            buttonLabel.setBackground(Color.YELLOW);
             buttonLabel.setText("SB");
         }
 
