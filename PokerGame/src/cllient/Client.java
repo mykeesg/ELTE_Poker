@@ -29,12 +29,12 @@ public class Client {
     private PrintWriter output;
 
     public Client(String name) throws IOException {
-//        socket = new Socket(HOST,PORT);
-//        input = new Scanner(socket.getInputStream());
-//        output = new PrintWriter(socket.getOutputStream());
-//        output.println(name);
-//        output.flush();
-//        System.out.println("Socket connected");
+        socket = new Socket(HOST,PORT);
+        input = new Scanner(socket.getInputStream());
+        output = new PrintWriter(socket.getOutputStream());
+        output.println(name);
+        output.flush();
+        System.out.println("Socket connected");
     }
 
     public static void main(String[] args) {
