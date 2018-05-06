@@ -11,6 +11,7 @@ import java.io.IOException;
 
 public class CardView extends JLabel {
 
+    // TODO preload all card images
     private BufferedImage image;
 
     public CardView(model.Card card) {

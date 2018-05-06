@@ -39,10 +39,14 @@ public class Client {
 
     public static void main(String[] args) {
         try {
-            Client client = new Client("Test name");
+            ClientFrontend clientFrontend = new ClientFrontend();
+
+            String name = clientFrontend.logIn();
+
+            Client client = new Client(name);
 
             new Thread(() -> {
-                ClientFrontend clientFrontend = new ClientFrontend();
+                clientFrontend.startGame();
 
                 clientFrontend.getRaise().addEventListener((sender, amount) -> {
                     JOptionPane.showMessageDialog(null, "Raised: " + amount);

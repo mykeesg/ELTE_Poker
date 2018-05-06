@@ -20,19 +20,29 @@ public class ClientFrontend implements IClientFrontend {
 
 
     public ClientFrontend() {
-        SwingUtilities.invokeLater(() -> {
-            frame.setContentPane(mainWindow.panel1);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            mainWindow.fold.addActionListener(event -> fold.invoke(this));
-            mainWindow.call.addActionListener(event -> call.invoke(this));
-            mainWindow.raise.addActionListener(event -> raise.invoke(this, (int) mainWindow.raiseAmount.getValue()));
-            mainWindow.exit.addActionListener(event -> quit.invoke(this));
+    }
 
+    public void startGame() {
+        frame.setContentPane(mainWindow.panel1);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            frame.pack();
-            frame.setVisible(true);
-        });
+        mainWindow.fold.addActionListener(event -> fold.invoke(this));
+        mainWindow.call.addActionListener(event -> call.invoke(this));
+        mainWindow.raise.addActionListener(event -> raise.invoke(this, (int) mainWindow.raiseAmount.getValue()));
+        mainWindow.exit.addActionListener(event -> quit.invoke(this));
+
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    public String logIn() {
+        LoginWindow dialog = new LoginWindow();
+        dialog.pack();
+        dialog.setVisible(true);
+
+        String name = dialog.textField1.getText();
+        return name;
     }
 
     @Override
