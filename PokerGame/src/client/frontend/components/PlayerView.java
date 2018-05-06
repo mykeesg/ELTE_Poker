@@ -1,6 +1,6 @@
-package cllient.frontend.components;
+package client.frontend.components;
 
-import cllient.frontend.model.PlayerState;
+import client.frontend.model.PlayerState;
 
 import javax.swing.*;
 import java.util.Arrays;

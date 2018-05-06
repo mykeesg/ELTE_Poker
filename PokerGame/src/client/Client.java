@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cllient;
+package client;
 
-import cllient.frontend.ClientFrontend;
-import cllient.frontend.model.GameState;
-import cllient.frontend.model.PlayerState;
+import client.frontend.ClientFrontend;
+import client.frontend.model.GameState;
+import client.frontend.model.PlayerState;
 import model.Card;
 import model.Rank;
 import model.Suit;

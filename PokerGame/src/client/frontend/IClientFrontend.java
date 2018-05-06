@@ -1,8 +1,8 @@
-package cllient.frontend;
+package client.frontend;
 
-import cllient.frontend.model.EventSource;
-import cllient.frontend.model.EventSourceT;
-import cllient.frontend.model.GameState;
+import client.frontend.model.EventSource;
+import client.frontend.model.EventSourceT;
+import client.frontend.model.GameState;
 
 public interface IClientFrontend {
     public void updateState(GameState newState);

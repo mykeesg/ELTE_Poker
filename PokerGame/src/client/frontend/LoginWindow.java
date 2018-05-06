@@ -1,4 +1,4 @@
-package cllient.frontend;
+package client.frontend;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

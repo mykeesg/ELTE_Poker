@@ -1,10 +1,10 @@
-package cllient.frontend;
+package client.frontend;
 
-import cllient.frontend.components.CardView;
-import cllient.frontend.components.PlayerView;
-import cllient.frontend.model.EventSource;
-import cllient.frontend.model.EventSourceT;
-import cllient.frontend.model.GameState;
+import client.frontend.components.CardView;
+import client.frontend.components.PlayerView;
+import client.frontend.model.EventSource;
+import client.frontend.model.EventSourceT;
+import client.frontend.model.GameState;
 
 import javax.swing.*;
 import java.util.Arrays;

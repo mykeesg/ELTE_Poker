@@ -1,4 +1,4 @@
-package cllient.frontend.model;
+package client.frontend.model;
 
 import java.util.ArrayList;
 import java.util.List;

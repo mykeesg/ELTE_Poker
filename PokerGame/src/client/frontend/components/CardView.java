@@ -1,4 +1,4 @@
-package cllient.frontend.components;
+package client.frontend.components;
 
 import model.Rank;
 import model.Suit;
@@ -22,9 +22,9 @@ public class CardView extends JLabel {
                 Rank rank = card.getRank();
                 Suit suit = card.getSuit();
                 // TODO remove
-                path = "./src/cllient/frontend/resources/" + ("" + rank.asChar()).replace("T", "10") + suit.toString().substring(0, 1) + ".png";
+                path = "./src/client/frontend/resources/" + ("" + rank.asChar()).replace("T", "10") + suit.toString().substring(0, 1) + ".png";
             } else {
-                path = "./src/cllient/frontend/resources/red_back.png";
+                path = "./src/client/frontend/resources/red_back.png";
             }
             System.out.println(path);
             File input = new File(path);
