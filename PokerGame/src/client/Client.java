@@ -29,12 +29,40 @@ public class Client {
     private PrintWriter output;
 
     public Client(String name) throws IOException {
-        socket = new Socket(HOST,PORT);
+        socket = new Socket(HOST, PORT);
         input = new Scanner(socket.getInputStream());
         output = new PrintWriter(socket.getOutputStream());
         output.println(name);
         output.flush();
         System.out.println("Socket connected");
+    }
+
+    /**
+     * Bedobás.
+     */
+    private void onFold() {
+
+    }
+
+    /**
+     * Check vagy call, az előző tét megadása.
+     */
+    private void onCall() {
+
+    }
+
+    /**
+     * Emelés.
+     */
+    private void onRaise(int amount) {
+        JOptionPane.showMessageDialog(null, "Raised: " + amount);
+    }
+
+    /**
+     * Kilépés.
+     */
+    private void onQuit() {
+        // kilépés lekezelése
     }
 
     public static void main(String[] args) {
@@ -46,11 +74,13 @@ public class Client {
             Client client = new Client(name);
 
             new Thread(() -> {
-                clientFrontend.startGame();
+                // eseménykezelők beállítása
+                clientFrontend.getFold().addEventListener(sender -> client.onFold());
+                clientFrontend.getCall().addEventListener(sender -> client.onCall());
+                clientFrontend.getRaise().addEventListener((sender, amount) -> client.onRaise(amount));
+                clientFrontend.getQuit().addEventListener(sender -> client.onQuit());
 
-                clientFrontend.getRaise().addEventListener((sender, amount) -> {
-                    JOptionPane.showMessageDialog(null, "Raised: " + amount);
-                });
+                clientFrontend.startGame();
 
                 clientFrontend.updateState(new GameState(
                         new PlayerState(
