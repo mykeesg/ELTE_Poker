@@ -15,4 +15,5 @@ public class MainWindow {
     public JLabel potLabel;
     public JPanel tableCards;
     public JPanel currentPlayer;
+    public JSpinner raiseAmount;
 }

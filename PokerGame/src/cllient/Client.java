@@ -72,7 +72,11 @@ public class Client {
                                 new Card(Suit.DIAMONDS, Rank.SIX),
                                 new Card(Suit.DIAMONDS, Rank.FIVE),
                         },
-                        1
+                        156,
+                        249,
+                        true,
+                        true,
+                        true
                 ));
             }).start();
 

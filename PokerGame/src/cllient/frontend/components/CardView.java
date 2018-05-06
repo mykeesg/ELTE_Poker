@@ -16,10 +16,15 @@ public class CardView extends JLabel {
     public CardView(model.Card card) {
         super();
         try {
-            Rank rank = card.getRank();
-            Suit suit = card.getSuit();
-            // TODO remove
-            String path = "./src/cllient/frontend/resources/" + ("" + rank.asChar()).replace("T", "10") + suit.toString().substring(0, 1) + ".png";
+            String path;
+            if (card != null) {
+                Rank rank = card.getRank();
+                Suit suit = card.getSuit();
+                // TODO remove
+                path = "./src/cllient/frontend/resources/" + ("" + rank.asChar()).replace("T", "10") + suit.toString().substring(0, 1) + ".png";
+            } else {
+                path = "./src/cllient/frontend/resources/red_back.png";
+            }
             System.out.println(path);
             File input = new File(path);
             System.out.println(input.exists());

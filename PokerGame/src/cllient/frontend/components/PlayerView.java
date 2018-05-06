@@ -4,6 +4,7 @@ import cllient.frontend.model.PlayerState;
 
 import javax.swing.*;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class PlayerView {
     public JPanel panel1;
@@ -28,6 +29,10 @@ public class PlayerView {
 
         Arrays.stream(player.hand).forEach(card ->
                 hand.add(new CardView(card))
+        );
+
+        IntStream.range(0, 2 - player.hand.length).forEach(i ->
+                hand.add(new CardView(null))
         );
     }
 }

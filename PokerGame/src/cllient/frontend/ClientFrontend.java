@@ -26,7 +26,7 @@ public class ClientFrontend implements IClientFrontend {
 
             mainWindow.fold.addActionListener(event -> fold.invoke(this));
             mainWindow.call.addActionListener(event -> call.invoke(this));
-            mainWindow.raise.addActionListener(event -> raise.invoke(this, 42));
+            mainWindow.raise.addActionListener(event -> raise.invoke(this, (int) mainWindow.raiseAmount.getValue()));
             mainWindow.exit.addActionListener(event -> quit.invoke(this));
 
 
@@ -37,7 +37,7 @@ public class ClientFrontend implements IClientFrontend {
 
     @Override
     public void updateState(GameState newState) {
-        mainWindow.potLabel.setText("$" + newState.pot);
+        mainWindow.potLabel.setText("POT $" + newState.pot);
 
         mainWindow.opponentsPanel.removeAll();
         Arrays.stream(newState.opponents).forEach(player ->
@@ -49,6 +49,10 @@ public class ClientFrontend implements IClientFrontend {
         );
         mainWindow.currentPlayer.removeAll();
         mainWindow.currentPlayer.add(new PlayerView(newState.currentPlayer).panel1);
+
+        mainWindow.fold.setEnabled(newState.canFold);
+        mainWindow.call.setEnabled(newState.canCall);
+        mainWindow.raise.setEnabled(newState.canRaise);
 
         frame.revalidate();
         frame.repaint();
