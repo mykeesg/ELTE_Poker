@@ -50,16 +50,28 @@ public class Client {
 
                 clientFrontend.updateState(new GameState(
                         new PlayerState(
-                                "Me",
-                                1,
+                                "Miki",
+                                249,
                                 new Card[]{
-                                        new Card(Suit.HEARTS, Rank.FOUR)
+                                        new Card(Suit.DIAMONDS, Rank.QUEEN),
+                                        new Card(Suit.DIAMONDS, Rank.KING),
                                 },
                                 false,
                                 false,
                                 false),
-                        new PlayerState[]{},
-                        new Card[]{},
+                        new PlayerState[]{
+                                new PlayerState("Peti", 380, new Card[]{}, true, false, false),
+                                new PlayerState("Jani", 249, new Card[]{}, false, true, false),
+                                new PlayerState("Józsi", 55, new Card[]{}, false, false, false),
+                                new PlayerState("Feri", 5, new Card[]{}, false, false, true),
+                        },
+                        new Card[]{
+                                new Card(Suit.DIAMONDS, Rank.QUEEN),
+                                new Card(Suit.DIAMONDS, Rank.KING),
+                                new Card(Suit.DIAMONDS, Rank.TEN),
+                                new Card(Suit.DIAMONDS, Rank.SIX),
+                                new Card(Suit.DIAMONDS, Rank.FIVE),
+                        },
                         1
                 ));
             }).start();

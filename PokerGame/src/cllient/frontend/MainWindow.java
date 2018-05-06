@@ -13,4 +13,6 @@ public class MainWindow {
     public JPanel actionButtons;
     public JPanel panel1;
     public JLabel potLabel;
+    public JPanel tableCards;
+    public JPanel currentPlayer;
 }

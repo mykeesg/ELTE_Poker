@@ -13,23 +13,21 @@ public class CardView extends JLabel {
 
     private BufferedImage image;
 
-    public CardView(model.Card card) throws IOException {
+    public CardView(model.Card card) {
         super();
         try {
             Rank rank = card.getRank();
             Suit suit = card.getSuit();
             // TODO remove
-            String path = "./src/cllient/resources/" + ("" + rank.asChar()).replace("T", "10") + suit.toString().substring(0, 1) + ".png";
+            String path = "./src/cllient/frontend/resources/" + ("" + rank.asChar()).replace("T", "10") + suit.toString().substring(0, 1) + ".png";
             System.out.println(path);
             File input = new File(path);
             System.out.println(input.exists());
             image = ImageIO.read(input);
-
         } catch (IOException ex) {
-            throw ex;
         }
         setSize(80, 120);
-        setIcon(new ImageIcon(image.getScaledInstance(80, 120,  java.awt.Image.SCALE_SMOOTH)));
+        setIcon(new ImageIcon(image.getScaledInstance(80, 120, java.awt.Image.SCALE_SMOOTH)));
     }
 
 //    @Override

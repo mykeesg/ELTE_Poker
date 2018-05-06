@@ -5,13 +5,13 @@ import model.Card;
 public class GameState {
     public PlayerState currentPlayer;
     public PlayerState[] opponents;
-    public Card[] deskCards;
+    public Card[] tableCards;
     public int pot;
 
-    public GameState(PlayerState currentPlayer, PlayerState[] opponents, Card[] deskCards, int pot) {
+    public GameState(PlayerState currentPlayer, PlayerState[] opponents, Card[] tableCards, int pot) {
         this.currentPlayer = currentPlayer;
         this.opponents = opponents;
-        this.deskCards = deskCards;
+        this.tableCards = tableCards;
         this.pot = pot;
     }
 }

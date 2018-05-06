@@ -1,10 +1,13 @@
 package cllient.frontend;
 
+import cllient.frontend.components.CardView;
+import cllient.frontend.components.PlayerView;
 import cllient.frontend.model.EventSource;
 import cllient.frontend.model.EventSourceT;
 import cllient.frontend.model.GameState;
 
 import javax.swing.*;
+import java.util.Arrays;
 
 public class ClientFrontend implements IClientFrontend {
     private EventSource fold = new EventSource();
@@ -26,6 +29,7 @@ public class ClientFrontend implements IClientFrontend {
             mainWindow.raise.addActionListener(event -> raise.invoke(this, 42));
             mainWindow.exit.addActionListener(event -> quit.invoke(this));
 
+
             frame.pack();
             frame.setVisible(true);
         });
@@ -33,8 +37,20 @@ public class ClientFrontend implements IClientFrontend {
 
     @Override
     public void updateState(GameState newState) {
-        mainWindow.potLabel.setText("" + newState.pot);
-        frame.validate();
+        mainWindow.potLabel.setText("$" + newState.pot);
+
+        mainWindow.opponentsPanel.removeAll();
+        Arrays.stream(newState.opponents).forEach(player ->
+                mainWindow.opponentsPanel.add(new PlayerView(player).panel1)
+        );
+        mainWindow.tableCards.removeAll();
+        Arrays.stream(newState.tableCards).forEach(card ->
+                mainWindow.tableCards.add(new CardView(card))
+        );
+        mainWindow.currentPlayer.removeAll();
+        mainWindow.currentPlayer.add(new PlayerView(newState.currentPlayer).panel1);
+
+        frame.revalidate();
         frame.repaint();
     }
 
