@@ -21,6 +21,11 @@ public class Pair<T, U> {
         this.second = second;
     }
 
+    public Pair(Pair<T, U> other) {
+        first = other.first;
+        second = other.second;
+    }
+
     public T getFirst() {
         return first;
     }

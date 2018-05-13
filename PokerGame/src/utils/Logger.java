@@ -14,8 +14,17 @@ import java.io.PrintStream;
 public class Logger {
 
     private final static PrintStream ERR = System.err;
-    
+    public static boolean LOGGING = false;
+
     public static void logMessage(String s) {
-        ERR.println(s);
+        if (LOGGING) {
+            ERR.println(s);
+        }
+    }
+
+    public static void logString(String s) {
+        if (LOGGING) {
+            ERR.print(s);
+        }
     }
 }

@@ -5,10 +5,12 @@
  */
 package model;
 
+import java.util.Scanner;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import java.net.Socket;
-import java.util.Scanner;
 
 /**
  *
@@ -30,9 +32,27 @@ public class Player {
         this.username = username;
         this.password = password;
         this.socket = socket;
-        this.input = new Scanner(socket.getInputStream());
-        this.output = new PrintWriter(socket.getOutputStream());
+        if (socket != null) {
+            this.input = new Scanner(socket.getInputStream());
+            this.output = new PrintWriter(socket.getOutputStream());
+        }
         money = 0;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void modifyMoney(int amount) {
+        money += amount;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 
     public void setHand(Card[] hand) {
