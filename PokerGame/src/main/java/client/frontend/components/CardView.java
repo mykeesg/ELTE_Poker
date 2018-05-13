@@ -39,12 +39,12 @@ public class CardView extends JLabel {
             String path;
             Rank rank = card.getRank();
             Suit suit = card.getSuit();
-            path = "./src/client/frontend/resources/" + ("" + rank.asChar()).replace("T", "10") + suit.toString().substring(0, 1) + ".png";
+            path = "./src/main/java/client/frontend/resources/" + ("" + rank.asChar()).replace("T", "10") + suit.toString().substring(0, 1) + ".png";
             Image image = loadAndResizeImage(path);
             images.put(card, image);
         });
 
-        String path = "./src/client/frontend/resources/red_back.png";
+        String path = "./src/main/java/client/frontend/resources/red_back.png";
         backImage = loadAndResizeImage(path);
     }
 
