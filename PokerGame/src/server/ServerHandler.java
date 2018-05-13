@@ -28,27 +28,25 @@ public class ServerHandler extends SimpleChannelInboundHandler {
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-//        Player p = new Player("",null,null,null);
-//        Server.getPlayerList().add(p);
-//        Channel incoming = ctx.channel();
-//        incoming.read();
         System.out.println("Someone trying to join");
+        Player p = new Player("", null, null, null);
+        Server.getPlayerList().add(p);
         Channel incoming = ctx.channel();
-        for (Channel channel : channels) {
-            channel.write("[SERVER] - " + incoming.remoteAddress() + " has joined!\n");
-        }
-        channels.add(ctx.channel());
-        System.out.println(channels);
         incoming.read();
+//        Channel incoming = ctx.channel();
+//        for (Channel channel : channels) {
+//            channel.write("[SERVER] - " + incoming.remoteAddress() + " has joined!\n");
+//        }
+//        channels.add(ctx.channel());
+//        System.out.println(channels);
+//        incoming.read();
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-//        Channel incoming = ctx.channel();
-//        channels.remove(ctx.channel());
-//        for (Channel channel : channels) {
-//            channel.write("[SERVER] - " + incoming.remoteAddress() + " has left!\n");
-//        }
+        Channel incoming = ctx.channel();
+        channels.remove(ctx.channel());
+        //TODO player listából kivenni
     }
 
     //TODO a játék állapotát frissíteni a kliens üzenetének megfelelően. Ha nem épp ő a soron következő játékos, akkor visszaküldeni egy hibaüzenetet.
@@ -56,17 +54,9 @@ public class ServerHandler extends SimpleChannelInboundHandler {
     protected void channelRead0(ChannelHandlerContext chc, Object message) throws Exception {
         Channel incoming = chc.channel();
         System.out.println("SERVER handler: " + message);
-
-        for (Channel channel : channels) {
-            /*if (channel != incoming)*/ {
-                channel.write("[" + incoming.remoteAddress() + "] " + message + "\n");
-                channel.flush();
-            }
-        }
         incoming.read();
     }
-    
-    
+
     public static void refreshStates() {
         int i = 0;
         for (Channel channel : channels) {

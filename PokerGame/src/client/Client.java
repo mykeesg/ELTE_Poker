@@ -51,13 +51,13 @@ public class Client {
             channel = bootstrap.connect(HOST, PORT).sync().channel();
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-//            //TODO ez csak debug
-//            while (channel.isActive()) {
-//                System.out.println("Write something");
-//                int b = Integer.parseInt(in.readLine());
-//                PokerAction a = new PokerAction(b,3000);
-//                channel.writeAndFlush(getSocketString(a));
-//            }
+            //TODO ez csak debug
+            while (channel.isActive()) {
+                System.out.println("Write something");
+                int b = Integer.parseInt(in.readLine());
+                PlayerAction a = new PlayerAction(b,3000);
+                channel.writeAndFlush(getSocketString(a));
+            }
         } catch (Exception e) {
             System.out.println(e);
         } finally {

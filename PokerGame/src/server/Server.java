@@ -51,13 +51,34 @@ public class Server {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
+            
+//            System.out.println("SERVER START");
+//            ServerBootstrap bootstrap = new ServerBootstrap()
+//                    .group(bossGroup, workerGroup)
+//                    .channel(NioServerSocketChannel.class)
+//                    .childHandler(new ServerInitializer());
+//
+//            System.out.println(100);
+//            ChannelFuture f0=bootstrap.bind(PORT);
+//            System.out.println(110);
+//            f0=f0.sync();
+//            System.out.println(120);
+//            Channel c0=f0.channel();
+//            System.out.println(130);
+//            f0=c0.closeFuture();
+//            System.out.println(135);
+//            c0.close();
+//            System.out.println(140);
+//            f0.sync();
+//            System.out.println("SERVER IS RUNNING");
+
             System.out.println("SERVER START");
             ServerBootstrap bootstrap = new ServerBootstrap()
                     .group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .childHandler(new ServerInitializer());
 
-            bootstrap.bind(PORT).sync().channel().closeFuture().sync();
+            bootstrap.bind(PORT).sync().channel(); //.closeFuture().sync();
             System.out.println("SERVER IS RUNNING");
             //TODO optimalization
 
@@ -70,6 +91,7 @@ public class Server {
 
                 AbstractPokerGame game = new PokerGame(playerList, MIN_BET);
                 game.newRound();
+                System.out.println("ciklus start");
                 currentPlayerIndex = 0;
 
                 while (!game.isGameOver()) {
