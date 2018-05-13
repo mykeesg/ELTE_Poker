@@ -69,7 +69,7 @@ public class Client {
      * Bedobás.
      */
     private void onFold() {
-        PokerAction a = new PokerAction(0);
+        PlayerAction a = new PlayerAction(0);
         channel.writeAndFlush(getSocketString(a));
 
     }
@@ -78,7 +78,7 @@ public class Client {
      * Check vagy call, az előző tét megadása.
      */
     private void onCall() {
-        PokerAction a = new PokerAction(1);
+        PlayerAction a = new PlayerAction(1);
         channel.writeAndFlush(getSocketString(a));
 
     }
@@ -87,7 +87,7 @@ public class Client {
      * Emelés.
      */
     private void onRaise(int amount) {
-        PokerAction a = new PokerAction(2,amount);
+        PlayerAction a = new PlayerAction(2,amount);
         channel.writeAndFlush(getSocketString(a));
     }
 

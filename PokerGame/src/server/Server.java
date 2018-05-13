@@ -10,13 +10,15 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
+import model.AbstractPokerGame;
+import model.GameAction;
 import model.Player;
 import model.PokerGame;
+import network.PlayerAction;
+import network.PokerState;
 
 /**
  *
@@ -27,7 +29,10 @@ public class Server {
     private static final int PORT = 444;
     private static final int MIN_PLAYER = 2;
     private static final int MIN_BET = 100;
-    private List<Player> playerList;
+    private static List<Player> playerList;
+    private static int currentPlayerIndex;
+    private static boolean messageRecieved;
+    private static PlayerAction action;
 
     public static void main(String[] args) {
         try {
@@ -46,6 +51,7 @@ public class Server {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
+            System.out.println("SERVER START");
             ServerBootstrap bootstrap = new ServerBootstrap()
                     .group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
@@ -53,13 +59,66 @@ public class Server {
 
             bootstrap.bind(PORT).sync().channel().closeFuture().sync();
             System.out.println("SERVER IS RUNNING");
+            //TODO optimalization
 
-        } catch (Exception e) {
+            while (true) {
+                while (playerList.size() < MIN_PLAYER) {
+                    System.out.println(playerList.size());
+                    Thread.sleep(2000);
+                }
+                System.out.println("GAME START");
 
+                AbstractPokerGame game = new PokerGame(playerList, MIN_BET);
+                game.newRound();
+                currentPlayerIndex = 0;
+
+                while (!game.isGameOver()) {
+                    System.out.println("------");
+                    System.out.println("Current turn is on: " + playerList.get(game.getCurrentPlayerID()).getName());
+                    System.out.println("\t his/her hand: " + Arrays.toString(playerList.get(game.getCurrentPlayerID()).getHand()));
+                    while (!messageRecieved) {
+                        Thread.sleep(1000);
+                    }
+
+                    GameAction act = GameAction.get(action.getAction());
+                    int money = 0;
+
+                    if (act == GameAction.RAISE) {
+                        System.out.println("Enter the amount to raise: ");
+                        money = action.getRaiseAmount();
+                    }
+
+                    game.takeAction(game.getCurrentPlayerID(), act, money);
+                    currentPlayerIndex = game.getCurrentPlayerID();
+
+                    refreshStates();
+
+                    //so the logs won't collide
+                    Thread.sleep(100);
+                }
+            }
+
+        } catch (Throwable e) {
+            System.out.println("itt");
+            System.out.println(e);
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
+    }
+
+    private void refreshStates() {
+        ServerHandler.refreshStates();
+    }
+
+    public static PokerState getState(int playerIndex) {
+        //TODO implements
+        PokerState state = null;
+        return state;
+    }
+
+    public static List<Player> getPlayerList() {
+        return playerList;
     }
 
 }

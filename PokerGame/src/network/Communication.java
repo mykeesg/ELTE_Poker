@@ -17,7 +17,6 @@ public class Communication {
 
         Gson gson = new Gson();
  
-        System.out.println(obj.getClass().getSimpleName() + gson.toJson(obj));
         return obj.getClass().getSimpleName() + gson.toJson(obj);
 
     }

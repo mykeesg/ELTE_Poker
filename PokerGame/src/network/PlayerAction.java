@@ -9,17 +9,17 @@ package network;
  *
  * @author iron2414
  */
-public class PokerAction {
+public class PlayerAction {
 
     private int action;
     private int raiseAmount;
 
-    public PokerAction(int action) {
+    public PlayerAction(int action) {
         this.action = action;
         this.raiseAmount = 0;
     }
 
-    public PokerAction(int action, int raiseAmount) {
+    public PlayerAction(int action, int raiseAmount) {
         this.action = action;
         this.raiseAmount = raiseAmount;
     }

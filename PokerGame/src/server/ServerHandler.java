@@ -11,6 +11,9 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import model.Player;
+import static network.Communication.getSocketString;
+import network.PokerState;
 
 /**
  *
@@ -25,6 +28,10 @@ public class ServerHandler extends SimpleChannelInboundHandler {
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+//        Player p = new Player("",null,null,null);
+//        Server.getPlayerList().add(p);
+//        Channel incoming = ctx.channel();
+//        incoming.read();
         System.out.println("Someone trying to join");
         Channel incoming = ctx.channel();
         for (Channel channel : channels) {
@@ -37,11 +44,11 @@ public class ServerHandler extends SimpleChannelInboundHandler {
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        Channel incoming = ctx.channel();
-        channels.remove(ctx.channel());
-        for (Channel channel : channels) {
-            channel.write("[SERVER] - " + incoming.remoteAddress() + " has left!\n");
-        }
+//        Channel incoming = ctx.channel();
+//        channels.remove(ctx.channel());
+//        for (Channel channel : channels) {
+//            channel.write("[SERVER] - " + incoming.remoteAddress() + " has left!\n");
+//        }
     }
 
     //TODO a játék állapotát frissíteni a kliens üzenetének megfelelően. Ha nem épp ő a soron következő játékos, akkor visszaküldeni egy hibaüzenetet.
@@ -57,5 +64,15 @@ public class ServerHandler extends SimpleChannelInboundHandler {
             }
         }
         incoming.read();
+    }
+    
+    
+    public static void refreshStates() {
+        int i = 0;
+        for (Channel channel : channels) {
+            PokerState state = Server.getState(i);
+            channel.write(getSocketString(state));
+            i++;
+        }
     }
 }
