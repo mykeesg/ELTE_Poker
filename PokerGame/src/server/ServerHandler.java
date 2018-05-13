@@ -32,16 +32,16 @@ public class ServerHandler extends SimpleChannelInboundHandler {
         }
         channels.add(ctx.channel());
         System.out.println(channels);
-		incoming.read();
+        incoming.read();
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         Channel incoming = ctx.channel();
+        channels.remove(ctx.channel());
         for (Channel channel : channels) {
             channel.write("[SERVER] - " + incoming.remoteAddress() + " has left!\n");
         }
-        channels.remove(ctx.channel());
     }
 
     //TODO a játék állapotát frissíteni a kliens üzenetének megfelelően. Ha nem épp ő a soron következő játékos, akkor visszaküldeni egy hibaüzenetet.
@@ -49,13 +49,13 @@ public class ServerHandler extends SimpleChannelInboundHandler {
     protected void channelRead0(ChannelHandlerContext chc, Object message) throws Exception {
         Channel incoming = chc.channel();
         System.out.println("SERVER handler: " + message);
-        
+
         for (Channel channel : channels) {
             /*if (channel != incoming)*/ {
                 channel.write("[" + incoming.remoteAddress() + "] " + message + "\n");
-				channel.flush();
+                channel.flush();
             }
         }
-		incoming.read();
+        incoming.read();
     }
 }

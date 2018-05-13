@@ -53,16 +53,6 @@ public class Server {
 
             bootstrap.bind(PORT).sync().channel().closeFuture().sync();
             System.out.println("SERVER IS RUNNING");
-//            while (true) {
-//                while (server.getPlayerList().size() < MIN_PLAYER) {
-//                    server.addPlayer();
-//                }
-//                PokerGame game = new PokerGame(server.getPlayerList(), MIN_BET);
-//                System.out.println("Game starting");
-//                while (!game.finished()) {
-//                    //TODO do Poker with the players
-//                }
-//            }
 
         } catch (Exception e) {
 

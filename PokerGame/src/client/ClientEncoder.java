@@ -5,9 +5,11 @@
  */
 package client;
 
+import com.google.gson.Gson;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import network.PokerAction;
 
 /**
  *
@@ -18,7 +20,10 @@ public class ClientEncoder extends MessageToByteEncoder {
     @Override
     protected void encode(ChannelHandlerContext chc, Object msg, ByteBuf out) throws Exception {
         //TODO a megfelelő üzenetet átküldeni a gombnak megfelelően, raise esetén vele együtt a mennyiséget is. (enum)
-         out.writeInt(2);
+        Gson gson = new Gson();
+
+        PokerAction a = new PokerAction(2);
+       
     }
-    
+
 }

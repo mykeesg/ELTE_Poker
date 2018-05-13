@@ -18,7 +18,7 @@ public class ClientDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext chc, ByteBuf in, List<Object> out) throws Exception {
-        //TODO eldönteni hogy milyen típust várok és ezeket implementálni. Lehet célszerű lenne mindig a teljes állapotot frissíteni és akkor fix a méret.
+        System.out.println("itt decoder");
         if(in.readableBytes() < 4) {
             return;
         }

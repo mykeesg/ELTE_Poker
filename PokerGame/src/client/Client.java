@@ -17,39 +17,47 @@ import java.io.BufferedReader;
 import model.Card;
 import model.Rank;
 import model.Suit;
-
 import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import static network.Communication.getSocketString;
+import network.*;
 
 /**
  * @author iron2414
  */
 public class Client {
+
     private static final int PORT = 444;
     private static final String HOST = "localhost";
     private String name;
+    private Channel channel;
 
     public Client(String name) throws IOException {
         this.name = name;
     }
-    
-        public void run() {
+
+    public void run() {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
+            System.out.println("Client init");
             Bootstrap bootstrap = new Bootstrap()
                     .group(group)
                     .channel(NioSocketChannel.class)
                     .handler(new ClientInitializer());
-            Channel channel = bootstrap.connect(HOST, PORT).sync().channel();
-            BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
-            
-            while(true) {
-                channel.writeAndFlush(in.readLine() + "\r\n");
-            }
+            channel = bootstrap.connect(HOST, PORT).sync().channel();
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+//            //TODO ez csak debug
+//            while (channel.isActive()) {
+//                System.out.println("Write something");
+//                int b = Integer.parseInt(in.readLine());
+//                PokerAction a = new PokerAction(b,3000);
+//                channel.writeAndFlush(getSocketString(a));
+//            }
         } catch (Exception e) {
             System.out.println(e);
         } finally {
@@ -61,6 +69,8 @@ public class Client {
      * Bedobás.
      */
     private void onFold() {
+        PokerAction a = new PokerAction(0);
+        channel.writeAndFlush(getSocketString(a));
 
     }
 
@@ -68,6 +78,8 @@ public class Client {
      * Check vagy call, az előző tét megadása.
      */
     private void onCall() {
+        PokerAction a = new PokerAction(1);
+        channel.writeAndFlush(getSocketString(a));
 
     }
 
@@ -75,14 +87,20 @@ public class Client {
      * Emelés.
      */
     private void onRaise(int amount) {
-        JOptionPane.showMessageDialog(null, "Raised: " + amount);
+        PokerAction a = new PokerAction(2,amount);
+        channel.writeAndFlush(getSocketString(a));
     }
 
     /**
      * Kilépés.
      */
     private void onQuit() {
-        // kilépés lekezelése
+       channel.close();
+    }
+    
+    private void onChangeName(String name) {
+        PlayerName a = new PlayerName(name);
+        channel.writeAndFlush(getSocketString(a));
     }
 
     public static void main(String[] args) {
@@ -90,9 +108,8 @@ public class Client {
             //ClientFrontend clientFrontend = new ClientFrontend();
 
             //String name = clientFrontend.logIn();
-
             Client client = new Client("Teszt");
-            
+
             new Thread(() -> {
                 client.run();
             }).start();
@@ -137,11 +154,9 @@ public class Client {
 //                        true
 //                ));
 //            }).start();
-
         } catch (Exception e) {
             System.out.println(e);
         }
     }
-
 
 }

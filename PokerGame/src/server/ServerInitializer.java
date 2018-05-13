@@ -27,8 +27,11 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel c) throws Exception {
         ChannelPipeline pipeline = c.pipeline();
 
-        pipeline.addLast("decoder", new ServerDecoder());
-        pipeline.addLast("encoder", new ServerEncoder());
+//        pipeline.addLast("decoder", new ServerDecoder());
+//        pipeline.addLast("encoder", new ServerEncoder());
+
+        pipeline.addLast("decoder", new StringDecoder());
+        pipeline.addLast("encoder", new StringEncoder());
 
         pipeline.addLast("handler", new ServerHandler());
     }
