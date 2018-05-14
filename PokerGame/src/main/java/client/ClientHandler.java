@@ -5,9 +5,13 @@
  */
 package client;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import network.GameState;
+import network.PlayerAction;
 
 /**
  *
@@ -18,11 +22,14 @@ public class ClientHandler extends SimpleChannelInboundHandler {
     public ClientHandler() {
     }
 
-    //TODO ezen az alapon valszeg ez sem fog menni?
     @Override
-    protected void channelRead0(ChannelHandlerContext chc, Object i) throws Exception {
-        System.out.println(i);
-        //TODO frissíteni a kliens állapotát az üzenetnek megfelelően
+    protected void channelRead0(ChannelHandlerContext chc, Object message) throws Exception {
+        Gson gson = new GsonBuilder().create();
+        //TODO kicserélni a megfelelő osztályra
+        System.out.println(message);
+        GameState action = gson.fromJson((String) message, GameState.class);
+        Client.refreshState(action);
+        System.out.println(action);
     }
-    
+
 }

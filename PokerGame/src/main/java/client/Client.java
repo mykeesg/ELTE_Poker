@@ -6,7 +6,6 @@
 package client;
 
 import client.frontend.ClientFrontend;
-import client.frontend.model.GameState;
 import client.frontend.model.PlayerState;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -33,8 +32,10 @@ public class Client {
 
     private static final int PORT = 444;
     private static final String HOST = "localhost";
-    private String name;
+    public static String name;
     private Channel channel;
+    private static GameState state;
+    private static ClientFrontend clientFrontend;
 
     public Client(String name) throws IOException {
         this.name = name;
@@ -49,15 +50,14 @@ public class Client {
                     .channel(NioSocketChannel.class)
                     .handler(new ClientInitializer());
             channel = bootstrap.connect(HOST, PORT).sync().channel();
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
             //TODO ez csak debug
-            while (channel.isActive()) {
-                System.out.println("Write something");
-                int b = Integer.parseInt(in.readLine());
-                PlayerAction a = new PlayerAction(b,3000);
-                channel.writeAndFlush(getSocketString(a));
-            }
+//            while (channel.isActive()) {
+//                System.out.println("Write something");
+//                int b = Integer.parseInt(in.readLine());
+//                PlayerAction a = new PlayerAction(b, 3000);
+//                channel.writeAndFlush(getSocketString(a));
+//            }
         } catch (Exception e) {
             System.out.println(e);
         } finally {
@@ -87,7 +87,7 @@ public class Client {
      * Emelés.
      */
     private void onRaise(int amount) {
-        PlayerAction a = new PlayerAction(2,amount);
+        PlayerAction a = new PlayerAction(2, amount);
         channel.writeAndFlush(getSocketString(a));
     }
 
@@ -95,24 +95,31 @@ public class Client {
      * Kilépés.
      */
     private void onQuit() {
-       channel.close();
+        channel.close();
     }
-    
+
     private void onChangeName(String name) {
-        PlayerName a = new PlayerName(name);
-        channel.writeAndFlush(getSocketString(a));
+        this.name = name;
     }
 
     public static void main(String[] args) {
         try {
-            //ClientFrontend clientFrontend = new ClientFrontend();
+            clientFrontend = new ClientFrontend();
 
-            //String name = clientFrontend.logIn();
+            String name = clientFrontend.logIn();
             Client client = new Client("Teszt");
+            client.run();
+            clientFrontend.getFold().addEventListener(sender -> client.onFold());
+            clientFrontend.getCall().addEventListener(sender -> client.onCall());
+            clientFrontend.getRaise().addEventListener((sender, amount) -> client.onRaise(amount));
+            clientFrontend.getQuit().addEventListener(sender -> client.onQuit());
 
-            new Thread(() -> {
-                client.run();
-            }).start();
+            clientFrontend.startGame();
+            
+
+//            new Thread(() -> {
+//                client.run();
+//            }).start();
 
 //            new Thread(() -> {
 //                // eseménykezelők beállítása
@@ -157,6 +164,13 @@ public class Client {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+    
+    
+    public static void refreshState(GameState state) {
+        Client.state = state;
+        //TODO conversion
+        //clientFrontend.updateState(state);
     }
 
 }

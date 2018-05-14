@@ -5,6 +5,8 @@
  */
 package network;
 
+import client.Client;
+
 /**
  *
  * @author iron2414
@@ -13,10 +15,12 @@ public class PlayerAction {
 
     private int action;
     private int raiseAmount;
+    private String name;
 
     public PlayerAction(int action) {
         this.action = action;
         this.raiseAmount = 0;
+        this.name = Client.name;
     }
 
     public PlayerAction(int action, int raiseAmount) {
