@@ -29,36 +29,41 @@ public class PokerGame implements AbstractPokerGame {
 
         plist.forEach(p -> p.setMoney(1000));
 
-        AbstractPokerGame game = new PokerGame(plist, 100);
-        game.newRound();
-
         Scanner input = new Scanner(System.in);
         System.out.println("Do you want to enable LOG messages? (y/n)");
         Logger.LOGGING = (input.nextLine().equalsIgnoreCase("y"));
 
-        Logger.logMessage("Dealer: " + plist.get(game.getDealerID()));
-        Logger.logMessage("Small blind: " + plist.get(game.getSmallBlindID()));
-        Logger.logMessage("Big blind: " + plist.get(game.getBigBlindID()));
+        String newRound = "y";
+        AbstractPokerGame game = new PokerGame(plist, 100);
+        do {
+            game.newRound();
 
-        while (!game.isGameOver()) {
-            System.out.println("------");
-            System.out.println("Current turn is on: " + plist.get(game.getCurrentPlayerID()).getName());
-            System.out.println("\t his/her hand: " + Arrays.toString(plist.get(game.getCurrentPlayerID()).getHand()));
-            System.out.println("Press 1 to Fold, 2 to Check/call, 3 to Raise");
+            Logger.logMessage("Dealer: " + plist.get(game.getDealerID()));
+            Logger.logMessage("Small blind: " + plist.get(game.getSmallBlindID()));
+            Logger.logMessage("Big blind: " + plist.get(game.getBigBlindID()));
 
-            GameAction act = GameAction.get(Integer.parseInt(input.nextLine()) - 1);
-            int money = 0;
+            while (!game.isRoundOver()) {
+                System.out.println("------");
+                System.out.println("Current turn is on: " + plist.get(game.getCurrentPlayerID()).getName());
+                System.out.println("\t his/her hand: " + Arrays.toString(plist.get(game.getCurrentPlayerID()).getHand()));
+                System.out.println("Press 1 to Fold, 2 to Check/call, 3 to Raise");
 
-            if (act == GameAction.RAISE) {
-                System.out.println("Enter the amount to raise: ");
-                money = Integer.parseInt(input.nextLine());
+                GameAction act = GameAction.get(Integer.parseInt(input.nextLine()) - 1);
+                int money = 0;
+
+                if (act == GameAction.RAISE) {
+                    System.out.println("Enter the amount to raise: ");
+                    money = Integer.parseInt(input.nextLine());
+                }
+
+                game.takeAction(game.getCurrentPlayerID(), act, money);
+
+                //so the logs won't collide
+                Thread.sleep(100);
             }
-
-            game.takeAction(game.getCurrentPlayerID(), act, money);
-
-            //so the logs won't collide
-            Thread.sleep(100);
-        }
+            System.out.println("Do you want to start a new round?  (y/n)");
+            newRound = input.nextLine();
+        } while (newRound.equalsIgnoreCase("y") && !game.isGameOver());
         System.out.println("game over");
     }
 
@@ -69,6 +74,8 @@ public class PokerGame implements AbstractPokerGame {
 
     private final List<Card> tableCards;
     private final int minimumBet;
+
+    private boolean roundOver;
 
     private int pot;
 
@@ -150,6 +157,11 @@ public class PokerGame implements AbstractPokerGame {
     @Override
     public List<Pair<Player, Result>> getFinalRanks() {
         return finalRanks;
+    }
+
+    @Override
+    public boolean isRoundOver() {
+        return roundOver;
     }
 
     private PokerPlayer smallBlindPlayer() {
@@ -325,7 +337,7 @@ public class PokerGame implements AbstractPokerGame {
         if (getPlayersStillInGame() == 1) {
             Logger.logMessage("Everyone else has fold, the winner is " + getWinner().getName() + "(won $" + pot + ").");
             getWinner().modifyMoney(pot);
-            newRound();
+            roundOver = true;
             return;
         }
 
@@ -345,7 +357,7 @@ public class PokerGame implements AbstractPokerGame {
                     break;
                 case RIVER:
                     showResult();
-                    newRound();
+                    roundOver = true;
                     return;
             }
             currentRound = currentRound.advance();

@@ -18,6 +18,8 @@ public interface AbstractPokerGame {
     public void newRound();
 
     public boolean isGameOver();
+    
+    public boolean isRoundOver();
 
     public Player getWinner();
 
