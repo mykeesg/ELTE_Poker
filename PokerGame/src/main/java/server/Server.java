@@ -31,7 +31,7 @@ import utils.Logger;
  */
 public class Server {
 
-    private static final int PORT = 444;
+    private static final int PORT = 4444;
     private static final int MIN_PLAYER = 2;
     private static final int MIN_BET = 100;
     private static List<Player> playerList;

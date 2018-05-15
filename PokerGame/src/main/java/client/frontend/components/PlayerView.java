@@ -1,6 +1,6 @@
 package client.frontend.components;
 
-import client.frontend.model.PlayerState;
+import network.PlayerState;
 
 import javax.swing.*;
 import java.awt.*;

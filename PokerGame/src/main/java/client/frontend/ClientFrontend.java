@@ -4,7 +4,7 @@ import client.frontend.components.CardView;
 import client.frontend.components.PlayerView;
 import client.frontend.model.EventSource;
 import client.frontend.model.EventSourceT;
-import client.frontend.model.GameState;
+import network.GameState;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -50,11 +50,11 @@ public class ClientFrontend implements IClientFrontend {
         mainWindow.potLabel.setText("POT $" + newState.pot);
 
         mainWindow.opponentsPanel.removeAll();
-        Arrays.stream(newState.opponents).forEach(player ->
+        newState.opponents.forEach(player ->
                 mainWindow.opponentsPanel.add(new PlayerView(player).panel1)
         );
         mainWindow.tableCards.removeAll();
-        Arrays.stream(newState.tableCards).forEach(card ->
+        newState.tableCards.forEach(card ->
                 mainWindow.tableCards.add(new CardView(card))
         );
         mainWindow.currentPlayer.removeAll();

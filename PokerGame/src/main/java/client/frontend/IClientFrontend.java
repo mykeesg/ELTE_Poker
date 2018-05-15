@@ -2,7 +2,7 @@ package client.frontend;
 
 import client.frontend.model.EventSource;
 import client.frontend.model.EventSourceT;
-import client.frontend.model.GameState;
+import network.GameState;
 
 public interface IClientFrontend {
     public void updateState(GameState newState);

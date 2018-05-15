@@ -6,7 +6,6 @@
 package client;
 
 import client.frontend.ClientFrontend;
-import client.frontend.model.PlayerState;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 import static network.Communication.getSocketString;
 import network.*;
@@ -30,7 +30,7 @@ import network.*;
  */
 public class Client {
 
-    private static final int PORT = 444;
+    private static final int PORT = 4444;
     private static final String HOST = "localhost";
     public static String name;
     private Channel channel;
@@ -79,7 +79,8 @@ public class Client {
      */
     private void onCall() {
         PlayerAction a = new PlayerAction(1);
-        channel.writeAndFlush(getSocketString(a));
+        String b = getSocketString(a);
+        channel.writeAndFlush(b);
 
     }
 
@@ -109,58 +110,19 @@ public class Client {
             String name = clientFrontend.logIn();
             Client client = new Client("Teszt");
             client.run();
-            clientFrontend.getFold().addEventListener(sender -> client.onFold());
-            clientFrontend.getCall().addEventListener(sender -> client.onCall());
-            clientFrontend.getRaise().addEventListener((sender, amount) -> client.onRaise(amount));
-            clientFrontend.getQuit().addEventListener(sender -> client.onQuit());
 
-            clientFrontend.startGame();
-            
 
-//            new Thread(() -> {
-//                client.run();
-//            }).start();
+            new Thread(() -> {
+                // eseménykezelők beállítása
+                clientFrontend.getFold().addEventListener(sender -> client.onFold());
+                clientFrontend.getCall().addEventListener(sender -> client.onCall());
+                clientFrontend.getRaise().addEventListener((sender, amount) -> client.onRaise(amount));
+                clientFrontend.getQuit().addEventListener(sender -> client.onQuit());
 
-//            new Thread(() -> {
-//                // eseménykezelők beállítása
-//                clientFrontend.getFold().addEventListener(sender -> client.onFold());
-//                clientFrontend.getCall().addEventListener(sender -> client.onCall());
-//                clientFrontend.getRaise().addEventListener((sender, amount) -> client.onRaise(amount));
-//                clientFrontend.getQuit().addEventListener(sender -> client.onQuit());
-//
-//                clientFrontend.startGame();
-//
-//                clientFrontend.updateState(new GameState(
-//                        new PlayerState(
-//                                "Miki",
-//                                249,
-//                                new Card[]{
-//                                        new Card(Suit.DIAMONDS, Rank.QUEEN),
-//                                        new Card(Suit.DIAMONDS, Rank.KING),
-//                                },
-//                                false,
-//                                false,
-//                                false),
-//                        new PlayerState[]{
-//                                new PlayerState("Peti", 380, new Card[]{}, true, false, false),
-//                                new PlayerState("Jani", 249, new Card[]{}, false, true, false),
-//                                new PlayerState("Józsi", 55, new Card[]{}, false, false, false),
-//                                new PlayerState("Feri", 5, new Card[]{}, false, false, true),
-//                        },
-//                        new Card[]{
-//                                new Card(Suit.DIAMONDS, Rank.QUEEN),
-//                                new Card(Suit.DIAMONDS, Rank.KING),
-//                                new Card(Suit.DIAMONDS, Rank.TEN),
-//                                new Card(Suit.DIAMONDS, Rank.SIX),
-//                                new Card(Suit.DIAMONDS, Rank.FIVE),
-//                        },
-//                        156,
-//                        249,
-//                        true,
-//                        true,
-//                        true
-//                ));
-//            }).start();
+                clientFrontend.startGame();
+
+
+            }).start();
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -170,7 +132,7 @@ public class Client {
     public static void refreshState(GameState state) {
         Client.state = state;
         //TODO conversion
-        //clientFrontend.updateState(state);
+        clientFrontend.updateState(state);
     }
 
 }
