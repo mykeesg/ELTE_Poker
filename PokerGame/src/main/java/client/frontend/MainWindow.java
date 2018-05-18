@@ -16,4 +16,6 @@ public class MainWindow {
     public JPanel tableCards;
     public JPanel currentPlayer;
     public JSpinner raiseAmount;
+    public JPanel infoPane;
+    public JLabel infoLabel;
 }

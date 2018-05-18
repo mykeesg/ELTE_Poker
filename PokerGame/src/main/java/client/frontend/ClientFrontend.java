@@ -33,7 +33,7 @@ public class ClientFrontend implements IClientFrontend {
         mainWindow.exit.addActionListener(event -> quit.invoke(this));
 
         frame.pack();
-        frame.setSize(640, 480);
+        frame.setSize(800, 600);
         frame.setVisible(true);
     }
 
@@ -49,6 +49,12 @@ public class ClientFrontend implements IClientFrontend {
     @Override
     public void updateState(GameState newState) {
         frame.setTitle("Poker (" + newState.currentPlayer.name + ")");
+
+        if (!newState.winnerName.isEmpty()) {
+            mainWindow.infoLabel.setText("Kör vége. Nyertes: " + newState.winnerName);
+        } else {
+            mainWindow.infoLabel.setText("Soron következő játékos: " + newState.currentTurnPlayerName);
+        }
 
         mainWindow.potLabel.setText("POT $" + newState.pot);
 
