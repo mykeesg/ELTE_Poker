@@ -33,6 +33,7 @@ public class ClientFrontend implements IClientFrontend {
         mainWindow.exit.addActionListener(event -> quit.invoke(this));
 
         frame.pack();
+        frame.setSize(640, 480);
         frame.setVisible(true);
     }
 
