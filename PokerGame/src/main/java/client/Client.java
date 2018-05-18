@@ -129,6 +129,7 @@ public class Client {
      */
     private void onQuit() {
         channel.close();
+        System.exit(0);
     }
 
     private void onChangeName(String name) {
