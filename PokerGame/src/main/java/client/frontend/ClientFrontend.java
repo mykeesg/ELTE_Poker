@@ -48,6 +48,8 @@ public class ClientFrontend implements IClientFrontend {
 
     @Override
     public void updateState(GameState newState) {
+        frame.setTitle("Poker (" + newState.currentPlayer.name + ")");
+
         mainWindow.potLabel.setText("POT $" + newState.pot);
 
         mainWindow.opponentsPanel.removeAll();
