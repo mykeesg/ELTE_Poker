@@ -126,6 +126,8 @@ public class Server {
                         //so the logs won't collide
                         Thread.sleep(100);
                     }
+                    //System.out.println("Round over winnner: "+ game.getWinner().getName());
+                    Thread.sleep(4000);
                 } while (!game.isGameOver());
             }
 
@@ -175,13 +177,18 @@ public class Server {
             }
             i++;
         }
+        //game.getWinner().getName()
+        String winnerName = game.isRoundOver() ? "DUMMY"  : "";
+        String currentPlayerName = playerList.get(game.getCurrentPlayerID()).getName();
         state = new GameState(currentPlayer, opponents,
                 Server.game.getTableCards(),
                 Server.game.getPot(),
                 1000,
                 true,
                 true,
-                true
+                true,
+                winnerName,
+                currentPlayerName
         );
         return state;
     }
