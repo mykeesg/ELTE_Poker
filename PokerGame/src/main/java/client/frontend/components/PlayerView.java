@@ -17,20 +17,24 @@ public class PlayerView {
     public PlayerView(PlayerState player) {
         nameLabel.setText(player.name);
         moneyLabel.setText("$" + player.money);
-        buttonLabel.setText("");
+
+        String buttonLabelText = " ";
+
         buttonLabel.setOpaque(true);
         if (player.isDealer) {
             buttonLabel.setBackground(Color.GRAY);
-            buttonLabel.setText("D");
+            buttonLabelText += "D ";
         }
         if (player.isBigBlind) {
             buttonLabel.setBackground(Color.RED);
-            buttonLabel.setText("BB");
+            buttonLabelText += "BB ";
         }
         if (player.isSmallBlind) {
             buttonLabel.setBackground(Color.YELLOW);
-            buttonLabel.setText("SB");
+            buttonLabelText += "SB ";
         }
+
+        buttonLabel.setText(buttonLabelText);
 
         Arrays.stream(player.hand).forEach(card ->
                 hand.add(new CardView(card))
