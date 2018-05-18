@@ -41,6 +41,35 @@ public class Client {
         this.name = name;
     }
 
+    public static void main(String[] args) {
+        try {
+            clientFrontend = new ClientFrontend();
+
+            String name = clientFrontend.logIn();
+            Client client = new Client("Teszt");
+            new Thread(() -> {
+                 client.run();
+            }).start();
+            clientFrontend.getFold().addEventListener(sender -> client.onFold());
+            clientFrontend.getCall().addEventListener(sender -> client.onCall());
+            clientFrontend.getRaise().addEventListener((sender, amount) -> client.onRaise(amount));
+            clientFrontend.getQuit().addEventListener(sender -> client.onQuit());
+
+            clientFrontend.startGame();
+            //TODO valahogy máshogy megoldani
+            while (true) {
+                Thread.sleep(1000);
+            }
+
+//            new Thread(() -> {
+//                // eseménykezelők beállítása
+//            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+    }
+
     public void run() {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
@@ -52,12 +81,15 @@ public class Client {
             channel = bootstrap.connect(HOST, PORT).sync().channel();
 
             //TODO ez csak debug
-//            while (channel.isActive()) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            while (channel.isActive()) {
+                //TODO stuff
+                Thread.sleep(2000);
 //                System.out.println("Write something");
 //                int b = Integer.parseInt(in.readLine());
 //                PlayerAction a = new PlayerAction(b, 3000);
 //                channel.writeAndFlush(getSocketString(a));
-//            }
+            }
         } catch (Exception e) {
             System.out.println(e);
         } finally {
@@ -103,32 +135,6 @@ public class Client {
         this.name = name;
     }
 
-    public static void main(String[] args) {
-        try {
-            clientFrontend = new ClientFrontend();
-
-            String name = clientFrontend.logIn();
-            Client client = new Client("Teszt");
-            client.run();
-
-
-            new Thread(() -> {
-                // eseménykezelők beállítása
-                clientFrontend.getFold().addEventListener(sender -> client.onFold());
-                clientFrontend.getCall().addEventListener(sender -> client.onCall());
-                clientFrontend.getRaise().addEventListener((sender, amount) -> client.onRaise(amount));
-                clientFrontend.getQuit().addEventListener(sender -> client.onQuit());
-
-                clientFrontend.startGame();
-
-
-            }).start();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-    
-    
     public static void refreshState(GameState state) {
         Client.state = state;
         //TODO conversion

@@ -89,7 +89,6 @@ public class Server {
 
             while (true) {
                 while (playerList.size() < MIN_PLAYER) {
-                    System.out.println(playerList.size());
                     Thread.sleep(2000);
                 }
                 Logger.LOGGING = true;
@@ -131,6 +130,7 @@ public class Server {
             }
 
         } catch (Throwable e) {
+            e.printStackTrace();
             System.out.println(e);
         } finally {
             bossGroup.shutdownGracefully();

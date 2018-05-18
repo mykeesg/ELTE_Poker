@@ -29,7 +29,6 @@ public class ClientHandler extends SimpleChannelInboundHandler {
         System.out.println(message);
         GameState action = gson.fromJson((String) message, GameState.class);
         Client.refreshState(action);
-        System.out.println(action);
     }
 
 }

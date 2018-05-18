@@ -24,7 +24,7 @@ import network.PlayerAction;
  */
 public class ServerHandler extends SimpleChannelInboundHandler {
 
-    private static final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    private static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     public ServerHandler() {
     }
@@ -36,12 +36,15 @@ public class ServerHandler extends SimpleChannelInboundHandler {
         p.setMoney(1000);
         Server.getPlayerList().add(p);
         Channel incoming = ctx.channel();
+        System.out.println(channels.size());
         channels.add(incoming);
+        System.out.println(channels.size());
         incoming.read();
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("SOMEONE DISCONNECTED");
         Channel incoming = ctx.channel();
         channels.remove(ctx.channel());
         //TODO player listából kivenni jövő félévre feladat
