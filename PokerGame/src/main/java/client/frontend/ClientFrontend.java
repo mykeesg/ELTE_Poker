@@ -14,6 +14,7 @@ public class ClientFrontend implements IClientFrontend {
     private EventSource call = new EventSource();
     private EventSourceT<Integer> raise = new EventSourceT<>();
     private EventSource quit = new EventSource();
+    private EventSourceT<String> changeName = new EventSourceT<>();
 
     private JFrame frame = new JFrame("Poker");
     private MainWindow mainWindow = new MainWindow();
@@ -31,6 +32,7 @@ public class ClientFrontend implements IClientFrontend {
         mainWindow.call.addActionListener(event -> call.invoke(this));
         mainWindow.raise.addActionListener(event -> raise.invoke(this, (int) mainWindow.raiseAmount.getValue()));
         mainWindow.exit.addActionListener(event -> quit.invoke(this));
+        mainWindow.changeName.addActionListener(event -> changeName.invoke(this, logIn()));
 
         frame.pack();
         frame.setSize(800, 600);
@@ -95,5 +97,10 @@ public class ClientFrontend implements IClientFrontend {
     @Override
     public EventSource getQuit() {
         return quit;
+    }
+
+    @Override
+    public EventSourceT<String> getChangeName() {
+        return changeName;
     }
 }

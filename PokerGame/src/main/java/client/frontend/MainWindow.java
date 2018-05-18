@@ -18,4 +18,5 @@ public class MainWindow {
     public JSpinner raiseAmount;
     public JPanel infoPane;
     public JLabel infoLabel;
+    public JButton changeName;
 }

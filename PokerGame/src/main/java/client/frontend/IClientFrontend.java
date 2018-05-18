@@ -14,4 +14,6 @@ public interface IClientFrontend {
     public EventSourceT<Integer> getRaise();
 
     public EventSource getQuit();
+
+    public EventSourceT<String> getChangeName();
 }

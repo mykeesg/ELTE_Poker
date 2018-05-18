@@ -54,6 +54,9 @@ public class Client {
             clientFrontend.getCall().addEventListener(sender -> client.onCall());
             clientFrontend.getRaise().addEventListener((sender, amount) -> client.onRaise(amount));
             clientFrontend.getQuit().addEventListener(sender -> client.onQuit());
+            clientFrontend.getChangeName().addEventListener((sender, newName) -> client.onChangeName(newName));
+
+            client.onChangeName(name);
 
             clientFrontend.startGame();
             //TODO valahogy máshogy megoldani
