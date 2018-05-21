@@ -22,7 +22,7 @@ import network.PlayerAction;
  *
  * @author iron2414
  */
-public class ServerHandler extends SimpleChannelInboundHandler {
+public class ServerHandler extends SimpleChannelInboundHandler<String> {
 
     private static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
@@ -52,7 +52,7 @@ public class ServerHandler extends SimpleChannelInboundHandler {
 
     //TODO a játék állapotát frissíteni a kliens üzenetének megfelelően. Ha nem épp ő a soron következő játékos, akkor visszaküldeni egy hibaüzenetet.
     @Override
-    protected void channelRead0(ChannelHandlerContext chc, Object message) throws Exception {
+    protected void channelRead0(ChannelHandlerContext chc, String message) throws Exception {
         Channel incoming = chc.channel();
         int i = 0;
         boolean found = false;

@@ -17,18 +17,29 @@ import network.PlayerAction;
  *
  * @author iron2414
  */
-public class ClientHandler extends SimpleChannelInboundHandler {
+public class ClientHandler extends SimpleChannelInboundHandler<String> {
 
     public ClientHandler() {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext chc, Object message) throws Exception {
+    protected void channelRead0(ChannelHandlerContext chc, String message) throws Exception {
         Gson gson = new GsonBuilder().create();
         //TODO kicserélni a megfelelő osztályra
         System.out.println(message);
-        GameState action = gson.fromJson((String) message, GameState.class);
-        Client.refreshState(action);
+        String lastChar = message.substring(message.length() - 1);
+        if (!lastChar.equals("}")) {
+            return;
+        }
+        try {
+            GameState action = gson.fromJson((String) message, GameState.class);
+            Client.refreshState(action);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("INBOUND MESSAGE ERROR:" + e);
+        }
+        return;
+
     }
 
 }
