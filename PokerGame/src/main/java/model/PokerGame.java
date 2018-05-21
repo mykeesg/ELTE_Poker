@@ -283,15 +283,13 @@ public class PokerGame implements AbstractPokerGame {
                         pokerPlayer.isPlaying = false;
                         break;
                     case RAISE:
-                        if (lastAction == GameAction.CHECK_OR_CALL) {
-                            players.forEach(p -> {
-                                if (p.isPlaying && p != pokerPlayer) {
-                                    p.hasPlacedBet = false;
-                                }
-                            });
-                            lastAction = GameAction.RAISE;
-                            lastRaiseAmount = money;
-                        }
+                        players.forEach(p -> {
+                            if (p.isPlaying && p != pokerPlayer) {
+                                p.hasPlacedBet = false;
+                            }
+                        });
+                        lastAction = GameAction.RAISE;
+                        lastRaiseAmount = money;
                         if (lastRaiseAmount > 0 && money < lastRaiseAmount && pokerPlayer.player.getMoney() >= lastRaiseAmount) {
                             throw new IllegalArgumentException("Player can't raise less, than $" + lastRaiseAmount + " if he's not 'All-in'!");
                         } else {
