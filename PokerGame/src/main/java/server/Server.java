@@ -57,26 +57,6 @@ public class Server {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
-
-//            System.out.println("SERVER START");
-//            ServerBootstrap bootstrap = new ServerBootstrap()
-//                    .group(bossGroup, workerGroup)
-//                    .channel(NioServerSocketChannel.class)
-//                    .childHandler(new ServerInitializer());
-//
-//            System.out.println(100);
-//            ChannelFuture f0=bootstrap.bind(PORT);
-//            System.out.println(110);
-//            f0=f0.sync();
-//            System.out.println(120);
-//            Channel c0=f0.channel();
-//            System.out.println(130);
-//            f0=c0.closeFuture();
-//            System.out.println(135);
-//            c0.close();
-//            System.out.println(140);
-//            f0.sync();
-//            System.out.println("SERVER IS RUNNING");
             System.out.println("SERVER START");
             ServerBootstrap bootstrap = new ServerBootstrap()
                     .group(bossGroup, workerGroup)
@@ -87,49 +67,47 @@ public class Server {
             System.out.println("SERVER IS RUNNING");
             //TODO optimalization
 
-            while (true) {
-                while (playerList.size() < MIN_PLAYER) {
-                    Thread.sleep(2000);
-                }
-                Logger.LOGGING = true;
-                game = new PokerGame(playerList, MIN_BET);
-                System.out.println("GAME START");
-                do {
-                    game.newRound();
+            while (playerList.size() < MIN_PLAYER) {
+                Thread.sleep(2000);
+            }
+            Logger.LOGGING = true;
+            game = new PokerGame(playerList, MIN_BET);
+            System.out.println("GAME START");
+            do {
+                game.newRound();
+                currentPlayerIndex = game.getCurrentPlayerID();
+                System.out.println("currentPlayer: " + currentPlayerIndex + "-" + playerList.get(currentPlayerIndex).getName());
+                refreshStates(game.isRoundOver());
+
+                while (!game.isRoundOver()) {
+                    System.out.println("------");
+                    System.out.println("Current turn is on: " + playerList.get(game.getCurrentPlayerID()).getName());
+                    System.out.println("\t his/her hand: " + Arrays.toString(playerList.get(game.getCurrentPlayerID()).getHand()));
+                    while (!messageRecieved) {
+                        Thread.sleep(1000);
+                    }
+
+                    System.out.println("message received: " + action.getAction() + " " + action.getRaiseAmount());
+                    GameAction act = GameAction.get(action.getAction());
+                    int money = 0;
+
+                    if (act == GameAction.RAISE) {
+                        money = action.getRaiseAmount();
+                    }
+
+                    game.takeAction(game.getCurrentPlayerID(), act, money);
                     currentPlayerIndex = game.getCurrentPlayerID();
-                    System.out.println("currentPlayer: "+currentPlayerIndex + "-"+playerList.get(currentPlayerIndex).getName());
+                    messageRecieved = false;
+                    action = null;
+
                     refreshStates(game.isRoundOver());
 
-                    while (!game.isRoundOver()) {
-                        System.out.println("------");
-                        System.out.println("Current turn is on: " + playerList.get(game.getCurrentPlayerID()).getName());
-                        System.out.println("\t his/her hand: " + Arrays.toString(playerList.get(game.getCurrentPlayerID()).getHand()));
-                        while (!messageRecieved) {
-                            Thread.sleep(1000);
-                        }
-
-                        System.out.println("message received: " + action.getAction() + " " + action.getRaiseAmount());
-                        GameAction act = GameAction.get(action.getAction());
-                        int money = 0;
-
-                        if (act == GameAction.RAISE) {
-                            money = action.getRaiseAmount();
-                        }
-
-                        game.takeAction(game.getCurrentPlayerID(), act, money);
-                        currentPlayerIndex = game.getCurrentPlayerID();
-                        messageRecieved = false;
-                        action = null;
-
-                        refreshStates(game.isRoundOver());
-
-                        //so the logs won't collide
-                        Thread.sleep(100);
-                    }
-                    //System.out.println("Round over winnner: "+ game.getWinner().getName());
-                    Thread.sleep(4000);
-                } while (!game.isGameOver());
-            }
+                    //so the logs won't collide
+                    Thread.sleep(100);
+                }
+                //System.out.println("Round over winnner: "+ game.getWinner().getName());
+                Thread.sleep(4000);
+            } while (!game.isGameOver());
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -177,8 +155,8 @@ public class Server {
             }
             i++;
         }
-        
-        String winnerName = game.isRoundOver() ? game.getWinner().getName()  : "";
+
+        String winnerName = game.isRoundOver() ? game.getWinner().getName() : "";
         String currentPlayerName = playerList.get(game.getCurrentPlayerID()).getName();
         state = new GameState(currentPlayer, opponents,
                 Server.game.getTableCards(),
