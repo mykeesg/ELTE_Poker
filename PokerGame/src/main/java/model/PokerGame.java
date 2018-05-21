@@ -82,6 +82,8 @@ public class PokerGame implements AbstractPokerGame {
     private Round currentRound;
     private GameAction lastAction;
 
+    private Player winner;
+
     private int currentPlayerID;
     private int dealerID;
     private int smallBlindID;
@@ -234,6 +236,7 @@ public class PokerGame implements AbstractPokerGame {
 
         lastRaiseAmount = minimumBet;
         lastAction = GameAction.RAISE;
+        winner = null;
 
         pot = minimumBet + minimumBet / 2;
 
@@ -249,12 +252,7 @@ public class PokerGame implements AbstractPokerGame {
 
     @Override
     public Player getWinner() {
-        for (PokerPlayer p : players) {
-            if (p.isPlaying) {
-                return p.player;
-            }
-        }
-        return null;
+        return winner;
     }
 
     @Override
@@ -335,6 +333,12 @@ public class PokerGame implements AbstractPokerGame {
 
     private void checkState() {
         if (getPlayersStillInGame() == 1) {
+            players.forEach(p -> {
+                if (p.isPlaying) {
+                    winner = p.player;
+                }
+            });
+
             Logger.logMessage("Everyone else has fold, the winner is " + getWinner().getName() + "(won $" + pot + ").");
             getWinner().modifyMoney(pot);
             roundOver = true;
@@ -400,8 +404,8 @@ public class PokerGame implements AbstractPokerGame {
         }
 
         Logger.logMessage("\n................................................");
+        winner = finalRanks.get(0).getFirst();
         finalRanks.get(0).getFirst().modifyMoney(pot);
-        players.forEach(p -> p.isPlaying = false);
     }
 
     private void dealFlop() {
