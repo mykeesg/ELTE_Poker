@@ -18,10 +18,6 @@ import model.Suit;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Scanner;
 import static network.Communication.getSocketString;
 import network.*;
 
