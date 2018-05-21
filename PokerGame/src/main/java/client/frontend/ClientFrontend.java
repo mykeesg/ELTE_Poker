@@ -32,7 +32,6 @@ public class ClientFrontend implements IClientFrontend {
         mainWindow.call.addActionListener(event -> call.invoke(this));
         mainWindow.raise.addActionListener(event -> raise.invoke(this, (int) mainWindow.raiseAmount.getValue()));
         mainWindow.exit.addActionListener(event -> quit.invoke(this));
-        mainWindow.changeName.addActionListener(event -> changeName.invoke(this, logIn()));
 
         frame.pack();
         frame.setSize(800, 600);
