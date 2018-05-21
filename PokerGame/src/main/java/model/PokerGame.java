@@ -240,6 +240,8 @@ public class PokerGame implements AbstractPokerGame {
 
         pot = minimumBet + minimumBet / 2;
 
+        roundOver = false;
+
         dealForPlayers();
 
         currentPlayerID = getNextPlayerFrom(bigBlindID);
