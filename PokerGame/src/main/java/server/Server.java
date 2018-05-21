@@ -177,8 +177,8 @@ public class Server {
             }
             i++;
         }
-        //game.getWinner().getName()
-        String winnerName = game.isRoundOver() ? "DUMMY"  : "";
+        
+        String winnerName = game.isRoundOver() ? game.getWinner().getName()  : "";
         String currentPlayerName = playerList.get(game.getCurrentPlayerID()).getName();
         state = new GameState(currentPlayer, opponents,
                 Server.game.getTableCards(),
