@@ -249,7 +249,7 @@ public class PokerGame implements AbstractPokerGame {
 
     @Override
     public boolean isGameOver() {
-        return players.stream().filter(p -> p.isPlaying).count() <= 1;
+        return players.stream().filter(p -> p.player.getMoney()>0).count() <= 1;
     }
 
     @Override
