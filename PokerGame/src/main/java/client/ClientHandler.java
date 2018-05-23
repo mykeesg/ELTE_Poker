@@ -19,20 +19,26 @@ import network.PlayerAction;
  */
 public class ClientHandler extends SimpleChannelInboundHandler<String> {
 
+    private String subMessage = "";
+
     public ClientHandler() {
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext chc, String message) throws Exception {
         Gson gson = new GsonBuilder().create();
-        //TODO kicserélni a megfelelő osztályra
         System.out.println(message);
-        String lastChar = message.substring(message.length() - 1);
-        if (!lastChar.equals("}")) {
+        if (message.length() < 1) {
+            return;
+        }
+        this.subMessage += message;
+        char lastChar = subMessage.charAt(subMessage.length() - 1);
+        if (lastChar != '}') {
             return;
         }
         try {
-            GameState action = gson.fromJson((String) message, GameState.class);
+            GameState action = gson.fromJson(this.subMessage, GameState.class);
+            this.subMessage = "";
             Client.refreshState(action);
         } catch (Exception e) {
             e.printStackTrace();
