@@ -5,21 +5,21 @@
  */
 package server;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import java.io.IOException;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import model.AbstractPokerGame;
 import model.Card;
 import model.GameAction;
 import model.Player;
 import model.PokerGame;
-import model.Rank;
-import model.Suit;
 import network.GameState;
 import network.PlayerAction;
 import network.PlayerState;
@@ -95,7 +95,11 @@ public class Server {
                         money = action.getRaiseAmount();
                     }
 
-                    game.takeAction(game.getCurrentPlayerID(), act, money);
+                    try {
+                        game.takeAction(game.getCurrentPlayerID(), act, money);
+                    } catch (IllegalArgumentException iae) {
+                        System.err.println(iae.getMessage());
+                    }
                     currentPlayerIndex = game.getCurrentPlayerID();
                     messageRecieved = false;
                     action = null;

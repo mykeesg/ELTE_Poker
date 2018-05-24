@@ -15,28 +15,32 @@ import utils.Pair;
  */
 public interface AbstractPokerGame {
 
-    public void newRound();
+    void newRound();
 
-    public boolean isGameOver();
-    
-    public boolean isRoundOver();
+    boolean isGameOver();
 
-    public Player getWinner();
+    boolean isRoundOver();
 
-    public List<Pair<Player, Result>> getFinalRanks();
+    Player getWinner();
 
-    public void takeAction(int playerID, GameAction action, int money);
+    List<Pair<Player, Result>> getFinalRanks();
 
-    public List<Card> getTableCards();
+    void takeAction(int playerID, GameAction action, int money);
 
-    public int getCurrentPlayerID();
+    List<Card> getTableCards();
 
-    public int getPot();
+    int getCurrentPlayerID();
 
-    public int getDealerID();
+    GameAction getLastAction();
 
-    public int getSmallBlindID();
+    int getLastRaiseAmount();
 
-    public int getBigBlindID();
+    int getPot();
+
+    int getDealerID();
+
+    int getSmallBlindID();
+
+    int getBigBlindID();
 
 }

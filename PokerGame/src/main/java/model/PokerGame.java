@@ -137,6 +137,16 @@ public class PokerGame implements AbstractPokerGame {
     }
 
     @Override
+    public GameAction getLastAction() {
+        return lastAction;
+    }
+
+    @Override
+    public int getLastRaiseAmount() {
+        return lastRaiseAmount;
+    }
+
+    @Override
     public int getPot() {
         return pot;
     }
@@ -229,16 +239,34 @@ public class PokerGame implements AbstractPokerGame {
 
         updateRoles();
 
-        smallBlindPlayer().player.setMoney(smallBlindPlayer().player.getMoney() - minimumBet / 2);
+        int sbmoney = smallBlindPlayer().player.getMoney();
+        int smallAmount = 0;
 
-        bigBlindPlayer().player.setMoney(bigBlindPlayer().player.getMoney() - minimumBet);
+        if (sbmoney < minimumBet / 2) {
+            smallBlindPlayer().player.setMoney(0);
+            smallAmount = sbmoney;
+        } else {
+            smallBlindPlayer().player.setMoney(sbmoney - minimumBet / 2);
+            smallAmount = minimumBet / 2;
+        }
+        smallBlindPlayer().hasPlacedBet = true;
+
+        int bigAmount = 0;
+        int bbmoney = bigBlindPlayer().player.getMoney();
+        if (bbmoney < minimumBet) {
+            bigBlindPlayer().player.setMoney(0);
+            bigAmount = bbmoney;
+        } else {
+            bigBlindPlayer().player.setMoney(bbmoney - minimumBet);
+            bigAmount = minimumBet;
+        }
         bigBlindPlayer().hasPlacedBet = true;
 
         lastRaiseAmount = minimumBet;
         lastAction = GameAction.RAISE;
         winner = null;
 
-        pot = minimumBet + minimumBet / 2;
+        pot = smallAmount + bigAmount;
 
         roundOver = false;
 
@@ -249,7 +277,7 @@ public class PokerGame implements AbstractPokerGame {
 
     @Override
     public boolean isGameOver() {
-        return players.stream().filter(p -> p.player.getMoney()>0).count() <= 1;
+        return players.stream().filter(p -> p.hasPlacedBet || p.player.getMoney() > 0).count() <= 1;
     }
 
     @Override
@@ -283,19 +311,22 @@ public class PokerGame implements AbstractPokerGame {
                         pokerPlayer.isPlaying = false;
                         break;
                     case RAISE:
-                        players.forEach(p -> {
-                            if (p.isPlaying && p != pokerPlayer) {
-                                p.hasPlacedBet = false;
-                            }
-                        });
-                        lastAction = GameAction.RAISE;
-                        lastRaiseAmount = money;
+                        if (money > pokerPlayer.player.getMoney()) {
+                            throw new IllegalArgumentException("Player can't raise more, than his actual balance ($" + pokerPlayer.player.getMoney() + ")");
+                        }
                         if (lastRaiseAmount > 0 && money < lastRaiseAmount && pokerPlayer.player.getMoney() >= lastRaiseAmount) {
                             throw new IllegalArgumentException("Player can't raise less, than $" + lastRaiseAmount + " if he's not 'All-in'!");
                         } else {
                             if (money < minimumBet && pokerPlayer.player.getMoney() >= minimumBet) {
                                 throw new IllegalArgumentException("Player can't raise less, than $" + minimumBet + " if he's not 'All-in'!");
                             }
+                            players.forEach(p -> {
+                                if (p.isPlaying && p != pokerPlayer) {
+                                    p.hasPlacedBet = false;
+                                }
+                            });
+                            lastAction = GameAction.RAISE;
+                            lastRaiseAmount = money;
                             pokerPlayer.hasPlacedBet = true;
                             pokerPlayer.player.modifyMoney(-money);
                             pot += money;
@@ -310,8 +341,13 @@ public class PokerGame implements AbstractPokerGame {
                                 pot += playerMoney;
                                 pokerPlayer.player.setMoney(0);
                             } else {
-                                pot += lastRaiseAmount;
-                                pokerPlayer.player.modifyMoney(-lastRaiseAmount);
+                                if (currentRound == Round.PREFLOP && pokerPlayer == smallBlindPlayer()) {
+                                    pot += lastRaiseAmount / 2;
+                                    pokerPlayer.player.modifyMoney(-lastRaiseAmount / 2);
+                                } else {
+                                    pot += lastRaiseAmount;
+                                    pokerPlayer.player.modifyMoney(-lastRaiseAmount);
+                                }
                             }
                         }
                         break;
@@ -447,7 +483,7 @@ public class PokerGame implements AbstractPokerGame {
         }
 
         public void reset() {
-            isPlaying = player.getMoney() >= PokerGame.this.minimumBet;
+            isPlaying = player.getMoney() > 0;
             hasPlacedBet = false;
             player.setHand(null);
         }
